@@ -1,3 +1,5 @@
+import sys
+
 #dicionario de dicionarios para facilitar a organização e acesso às informações das instruções
 mapa_instrucoes = {
     'add': {'tipo': 'R', 'funct3': '000', 'funct7': '0000000', 'opcode': '0110011'},
@@ -134,3 +136,57 @@ def montador(instrucao):
         binario_final = f'{imm_1}{imm_2}{rs2}{rs1}{funct3}{imm_3}{imm_4}{opcode}'
 
     return binario_final
+
+
+def main():
+    #if pra verificar se o usuário passou o arquivo de entrada de forma certa
+    if len(sys.argv) < 2:
+        print('Erro. Chamada incorreta do sistema')
+        sys.exit(1)
+
+    arquivo_entrada = sys.argv[1]
+    arquivo_saida = None
+
+    #if pra verificar se o usuário quer salvar os resultados em um arquivo de saída
+    if len(sys.argv) >= 4 and sys.argv[2] == '-o':
+        arquivo_saida = sys.argv[3]
+
+    #bloco pra tentar ler o arquivo de entrada
+    try:
+        with open(arquivo_entrada, 'r') as f:
+            linhas = f.readlines()
+    except FileNotFoundError:
+        print(f'Arquivo não encontrado')
+        sys.exit(1)
+
+    resultados_binarios = []
+    
+    #gera os binarios pra cada linha, verificando se a instrução é válida ou se está ou não mapeada
+    for linha in linhas:
+        linha_limpa = linha.strip()
+        
+        if not linha_limpa:
+            continue
+            
+        binario = montador(linha_limpa)
+
+        if len(binario) != 32:
+            print(f'Erro: {binario}.\n-> {linha_limpa}.\nEncerrando o programa...')
+            sys.exit(1)
+
+        resultados_binarios.append(binario)
+
+    #bloco para dar os resultados em um arquivo de saída
+    if arquivo_saida:
+        with open(arquivo_saida, 'w') as f:
+            for binario in resultados_binarios:
+                f.write(binario + '\n')
+        print(f'OK')
+
+    #bloco pra printar os resultados no terminal mesmo 
+    else:
+        for binario in resultados_binarios:
+            print(binario)
+
+if __name__ == '__main__':
+    main()
