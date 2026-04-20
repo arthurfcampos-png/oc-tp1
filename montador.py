@@ -87,7 +87,7 @@ def montador(instrucao):
         binario_final = f'{funct7}{rs2}{rs1}{funct3}{rd}{opcode}'
 
 
-    if dados['tipo'] == 'S':
+    elif dados['tipo'] == 'S':
         funct3 = dados['funct3']
         opcode = dados['opcode']
 
@@ -103,7 +103,7 @@ def montador(instrucao):
         binario_final = f'{imm_1}{rs2}{rs1}{funct3}{imm_2}{opcode}'
 
 
-    if dados['tipo'] == 'I':
+    elif dados['tipo'] == 'I':
         funct3 = dados['funct3']
         opcode = dados['opcode']
         
@@ -119,7 +119,7 @@ def montador(instrucao):
         binario_final = f'{imm_bin}{rs1}{funct3}{rd}{opcode}'
 
 
-    if dados['tipo'] == 'B':
+    elif dados['tipo'] == 'B':
         funct3 = dados['funct3']
         opcode = dados['opcode']
         
@@ -135,6 +135,9 @@ def montador(instrucao):
         
         binario_final = f'{imm_1}{imm_2}{rs2}{rs1}{funct3}{imm_3}{imm_4}{opcode}'
 
+    else:
+        return 'Erro: tipo de instrução desconhecido'
+
     return binario_final
 
 
@@ -148,7 +151,7 @@ def main():
     arquivo_saida = None
 
     #if pra verificar se o usuário quer salvar os resultados em um arquivo de saída
-    if len(sys.argv) >= 4 and sys.argv[2] == '-o':
+    if len(sys.argv) == 4 and sys.argv[2] == '-o':
         arquivo_saida = sys.argv[3]
 
     #bloco pra tentar ler o arquivo de entrada
